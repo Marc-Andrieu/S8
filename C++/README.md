@@ -5,6 +5,8 @@
 
 # Cours C++ avec E. D.
 
+[Lien du cours](http://perso.ec-lyon.fr/derrode.stephane/Teaching/ECL2A3A/ECL2A_C%2B%2B)
+
 ## Un peu d'histoire
 
 * `C` (1972, *Ken Thompson* ce **GOAT**) après `B`, pr réécrire `UNIX`
