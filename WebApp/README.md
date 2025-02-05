@@ -1,6 +1,6 @@
 <script
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
-  type="text/javascript">
+    src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+    type="text/javascript">
 </script>
 
 # Applications Web avec R. C.
@@ -14,20 +14,20 @@
 
 ### Eval
 * Autonomie en binôme (je SG Ñool)
-  * Rendu du src + "rapport" (on va juste faire de la doc)
-  * Restitution (oral)
+    * Rendu du src + "rapport" (on va juste faire de la doc)
+    * Restitution (oral)
 * Partiel : QCM
 
 ### La stack ds cet électif
 * Front :
-  * HTML5
-  * JS pur
-    * AJAX : pr les WS (WebSocket)
-    * DOM : pr modif le html
-    * Qlq APIs...
+    * HTML5
+    * JS pur
+        * AJAX : pr les WS (WebSocket)
+        * DOM : pr modif le html
+        * Qlq APIs...
 * Back :
-  * API : node.js
-  * DB : *rien de spécifié*
+    * API : node.js
+    * DB : *rien de spécifié*
 
 ### Histoire et fun facts
 
@@ -97,12 +97,12 @@ y a `console.log("yo")`, ms aussi `.info(), .warn(), .error()`
 
 ```js
 if (cond) {
-  instr;
+    instr;
 } else {
-  instr;
+    instr;
 }
 for (let i = 0; i < n; i++) { // cf. let
-  instr;
+    instr;
 }
 while
 switch
@@ -165,7 +165,7 @@ Dérivé de la syntaxe anonyme (on a juste tej le `function` et ajouté `=>`).
 Introduit en ES6.
 ```js
 ma_fn = (n) => {
-  return n;
+    return n;
 }
 ```
 
@@ -175,7 +175,7 @@ Avec `arguments`, comme `*args` en Py :
 ```js
 () => { //tqt on a mm pas besoin de parler d'args
  for (i = 0; i < arguments.length; i++ ) {
-  instr;
+    instr;
  }
 }
 ```
@@ -184,7 +184,7 @@ Avec `arguments`, comme `*args` en Py :
 
 * Une var est *déclarée* si y a un `var, let` ou `const` devant
 * Les déclarées sont locales, les non-déclarées sont globales par défaut !
-  * Donc à l'intérieur d'une fn, mets des `var` stp
+    * Donc à l'intérieur d'une fn, mets des `var` stp
 ```js
 var x = 1; // déclarée et defined
 var y; // déclarée ms undefined
@@ -192,8 +192,8 @@ z = 2; // non-déclarée et defined
 let l = 3; // introduit en ES6, pr lim au bloc actuel la portée d'une var
 const c = 4; // introduit en ES6. Throw un TypeError si on essaie de modif un const
 u = (() => {
-  var v = 1; // locale
-  return v + 2;
+    var v = 1; // locale
+    return v + 2;
 })(); // u = 3;
 ```
 
@@ -238,9 +238,9 @@ t.length;
 
 // "Associative array" (dico), (aussi appelé Object pr faire joli, ms faut pas le dire). C du JSON ds une var
 dico = { // hétérogène
-  nom1: 42,
-  nom2: true, // attribut
-  fn: (n) => {n * n}, // method : c juste que la variable en value c une fn (et en vrai c pas con !)
+    nom1: 42,
+    nom2: true, // attribut
+    fn: (n) => {n * n}, // method : c juste que la variable en value c une fn (et en vrai c pas con !)
 };
 dico["nom1"] // tjs possible
 dico.nom1 // possible si "nom1" est pas chelou
