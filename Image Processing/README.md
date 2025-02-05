@@ -1,6 +1,6 @@
 <script
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
-  type="text/javascript">
+    src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+    type="text/javascript">
 </script>
 
 # Capteurs et traitement d'images
@@ -50,7 +50,7 @@ L'avantage du CMOS vs CCD assez guez :
 
 #### Photo-transduction (conversion photon -> charges élec)
 
-Graphe Watt lumineux ($A/W$) en fonction de la longueur d'onde  $\lambda$ ($\mu m$) :
+Graphe Watt lumineux ($A/W$) en fonction de la longueur d'onde $\lambda$ ($\mu m$) :
 * en théorie (photodiode idéale) y a proportionalité
 * en pratique c assez affine sur $[0,2; 1] \, \mu m$ et après bam ça chute.
 * Justement sur $[0,8; 1] \, \mu m$ c hors du visible ms la photodiode le voit, c pr ça que les télécommandes etc utilisent le NIR (*near infrared*).
@@ -79,7 +79,7 @@ Techno pixel actif 3T : y a un ampli deds.
 Et un bail d'interrupteur qui empêche le courant de fuite de passer ds le bus colonne jusqu'en "bas".
 
 $\displaystyle U = \frac{I t}{C}$ : à courant constant, la tension est affine en le temps d'exposition.
-Et ce courant est proportionnel à l'intensité lumineuse : pr un pixel + éclairé, la tension diminue  + vite.
+Et ce courant est proportionnel à l'intensité lumineuse : pr un pixel + éclairé, la tension diminue + vite.
 On ft l'acquisition après un tps adapté à la luminosité de l'ensemble des pixels.
 
 Avec 10 ms de décharge et 0,04 ms de lecture, on perd pas de temps : dès la lecture du $750^e$ pixel, on relance la décharge du $1^e$, commme ça on le lit dès que le $999^e$ est lu.

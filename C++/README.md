@@ -1,6 +1,6 @@
 <script
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
-  type="text/javascript">
+    src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+    type="text/javascript">
 </script>
 
 # Cours C++ avec E. D.
@@ -199,7 +199,7 @@ Le pointeur, c l'entier qui est l'adresse mémoire d'une autre var
 
 En gros y a :
 * les variables normales : on en fait des adresses avec `&`
-* les adresses (pointeurs) : on en fait des  variables normales avec `*`
+* les adresses (pointeurs) : on en fait des variables normales avec `*`
 ```cpp
 double x = 3.14;
 double *pt; //pointeur sur du type double

@@ -1,6 +1,6 @@
 <script
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
-  type="text/javascript">
+    src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+    type="text/javascript">
 </script>
 
 # CM 1 : P. M.
@@ -13,10 +13,10 @@ Défs initiales :
 * Ces caracs donnent aux individus une **fitness** (*adaptation* [au milieu]) plus ou moins grde.
 * La **sélec nat** favorise les individus les + adaptés, en ceci qu’ils se reproduisent +.
 * Ils se reproduisent 
-  * par **crossover** (*recombination* [des gènes], $(x; y) \mapsto moy(x; y)$), avec ou sans **mutation**,
-  * ou par **clonage** et mutation obligatoire ($x \mapsto x +$ `rnd`).
+    * par **crossover** (*recombination* [des gènes], $(x; y) \mapsto moy(x; y)$), avec ou sans **mutation**,
+    * ou par **clonage** et mutation obligatoire ($x \mapsto x +$ `rnd`).
 
-Le  crossover sans mutation, c de la dichotomie :
+Le crossover sans mutation, c de la dichotomie :
 * Avantage : rapide.
 * Inconvénient : on trouve que des extrema locaux.
 
