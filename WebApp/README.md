@@ -3,7 +3,7 @@
   type="text/javascript">
 </script>
 
-# Applications Web
+# Applications Web avec R. C.
 
 ## Intro
 
@@ -80,10 +80,9 @@ y a `console.log("yo")`, ms aussi `.info(), .warn(), .error()`
 #### Opérateur de nombres
 
 ```js
-<
->
-<=
->=
+<, >, <=, >=
+==, != // ici 42 == true oui
+===, !== // strict : 42 === true non
 ```
 
 #### Opérateurs de bools
@@ -126,12 +125,6 @@ maVar = bool ? si_true : si_false;
 % // modulo
 ++, -- // incr et décrémentation
 +=, -=
-```
-
-### Types
-
-```js
-undefined
 ```
 
 ### Fonction
@@ -189,15 +182,124 @@ Avec `arguments`, comme `*args` en Py :
 
 ### Variables
 
-* Une var est *déclarée* si y a un `var` devant
-* Les non-déclarées sont globales par défaut !
+* Une var est *déclarée* si y a un `var, let` ou `const` devant
+* Les déclarées sont locales, les non-déclarées sont globales par défaut !
   * Donc à l'intérieur d'une fn, mets des `var` stp
 ```js
 var x = 1; // déclarée et defined
 var y; // déclarée ms undefined
 z = 2; // non-déclarée et defined
+let l = 3; // introduit en ES6, pr lim au bloc actuel la portée d'une var
+const c = 4; // introduit en ES6. Throw un TypeError si on essaie de modif un const
+u = (() => {
+  var v = 1; // locale
+  return v + 2;
+})(); // u = 3;
 ```
-* `let` : introduit en ES6, pr lim au bloc actuel la portée d'une var
+
+### Types
+
+```js
+typeof variable // return son type
+
+true, false // 0, -0, null, NaN, undefined, et "" se convertissent en false; et TOUT le reste en true
+// undefined et null, c une valeur et un type, comme None en Py
+undefined // pr les var non-init
+null // initialisé à null
+object // divers trucs, comme les listes, null, une instance de classe
+function // fn et classes
+
+// Nombre : pas d'entier, que ces flotants en JS
+n = 3;
+flotant = 3.14;
+scienfitique = 3.14e0;
+o = 0o777; // = 511, c de l'octal (base 8)
+h = 0xff; // = 255, c de l'hexadécimal
+inf = Infinity;
+nan = NaN;
+
+// String : ils sont pas mutables
+double = ""; // un \ pr escape
+simple = '';
+mon_str.length;
+mon_str[42]; // clasico
+mon_str.substring(n, m) // prend les chars n à m - 1
+// Pr l'unicode :
+"\u0301" // diacritique pr l'accent aigu; ça compte comme 1 char itself (é = 2 chars.. ms blc nan?)
+"\u{1F60E}" // pr ceux sur 2 unités de 16 bits
+mon_str = mon_str.normalize(); // fusionne des caractères, comme ça "é" comme comme 1 char
+[...mon_str] // liste avec les chars
+
+// Arrays
+t = [1, true]; //hétérogènes
+t[42] = "a"; // dynamiques
+t[0]; // commence à 0
+t.length;
+
+// "Associative array" (dico), (aussi appelé Object pr faire joli, ms faut pas le dire). C du JSON ds une var
+dico = { // hétérogène
+  nom1: 42,
+  nom2: true, // attribut
+  fn: (n) => {n * n}, // method : c juste que la variable en value c une fn (et en vrai c pas con !)
+};
+dico["nom1"] // tjs possible
+dico.nom1 // possible si "nom1" est pas chelou
+for (clef in dico) {} // seule façon d'itérer sur les keys, et impossible direct sur les values
+// JSON : KEYS entre "guillemets"
+
+```
+
+#### Conversions bricolées
+
+```js
++truc; // nbr
+truc + ""; // str
+parseInt("12.34azerty") // -> 12
+parseFloat("12.34azerty") // -> 12.34
+```
+
+#### Objets natifs
+
+```js
+Boolean, Number, String // encapsulent le type primitif correspondant
+Math
+Array, Date, Error, RegExp // ça hérite + ou - d'Object 
+Function
+Object
+
+// Pas natifs
+JSON, Array, Promise, Map, WebAssembly
+
+// Number
+Number.isInteger(n)
+// y a qlq fonctions pr en faire des str assez pretty
+n.toExponential()
+n.toFixed()
+n.toLocaleString('fr-FR')
+n.toPrecision()
+n.toString()
+
+// Math
+Math.PI // et qlq autres constantes
+Math.min() // et plein d'autres methods
+
+// String
+// plein de methods : startsWith, endsWith, includes, 
+// à la regex : match, replace, search, slice, split, substring,
+// autres : normalize, toLocaleLowerCase(), toLowerCase()
+// etc
+
+// JSON : 2 methods et c tout
+JSON.stringify({}); // serialization
+JSON.parse(""); // deserialization
+
+// Array
+t.length = n; // tronque le tableau
+// Manipulés par référence :
+a = [42];
+b = a; // pointent vers la mm adresse
+a[0] = 30; // désormais b pointe aussi sur [30]
+```
 
 ### Vrac
 
