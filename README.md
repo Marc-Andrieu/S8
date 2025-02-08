@@ -1,0 +1,12 @@
+Pages des électifs :
+* [Programmation des interfaces graphiques en C++](https://pedagogie2.ec-lyon.fr/course/view.php?id=2644)
+    * [Soft redirect](http://perso.ec-lyon.fr/derrode.stephane/Teaching/ECL2A3A/ECL2A_C++/)
+* [Algorithmes collaboratifs et applications](https://pedagogie2.ec-lyon.fr/course/view.php?id=2647) 
+    * [Algorithmes génétiques (par P. M.)](https://pedagogie2.ec-lyon.fr/course/view.php?id=2647&section=1)
+    * [Réseaux de neurones (par A. S.)](https://pedagogie2.ec-lyon.fr/course/view.php?id=2647&section=2)
+* [Capteurs et traitement d'images](https://pedagogie2.ec-lyon.fr/course/view.php?id=2659)
+    * [Cours](https://pedagogie2.ec-lyon.fr/course/view.php?id=2659&section=2)
+    * [BE](https://pedagogie2.ec-lyon.fr/course/view.php?id=2659&section=3)
+* [Applications Web](https://pedagogie2.ec-lyon.fr/course/view.php?id=2668)
+    * [Cours](https://pedagogie2.ec-lyon.fr/course/view.php?id=2668&section=1)
+* [Antennes, signal et processeurs](https://pedagogie2.ec-lyon.fr/course/view.php?id=2688)
