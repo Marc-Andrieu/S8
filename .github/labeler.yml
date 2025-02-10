@@ -1,0 +1,15 @@
+C++:
+- changed-files:
+  - any-glob-to-any-file: C++/**
+Algos collabos:
+- changed-files: 
+  - any-glob-to-any-file: Algos_Collabos/**
+Img processing:
+- changed-files: 
+  - any-glob-to-any-file: Img_Processing/**
+WebApp:
+- changed-files: 
+  - any-glob-to-any-file: WebApp/**
+Antennes:
+- changed-files:
+  - any-glob-to-any-file: Antennes/**
