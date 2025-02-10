@@ -4,4 +4,8 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+        damierstat.cpp \
         main.cpp
+
+HEADERS += \
+    damierstat.h

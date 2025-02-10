@@ -419,3 +419,9 @@ NomClasse::NomClasse (type arg) { // impl d'un constructeur
 ### Constructeur
 
 * Ca sert à s'assurer qu'à la déclaration d'un objet, il soit bien bien initialisé (attr définis).
+
+## Vrac
+
+Pr chaque classe, on a 2 fichiers :
+* un `.h`pr ...
+* un `.cpp` pr ...
