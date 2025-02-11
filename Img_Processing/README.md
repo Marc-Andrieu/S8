@@ -117,3 +117,72 @@ Le partiel c un QCM. Le reste c des compte-rendus de BE
 El big clasico modèle pinhole comme tjs.
 * Y a une focale $f$
 * On peut faire de la géométrie projective (finally, après 21 ans à attendre)
+* $x$ vers la gauche, $y$ vers le haut, et $z$ en profondeur
+
+#### Lim
+
+* Résolution
+* *Dynamic range* (euh c quoi ?)
+    * Saturation avec luminosité trop forte
+    * Tout noir si luminosité très faible (sous un threshold)
+* Spectre du visible
+* Synthèse additive (de couleur)
+
+#### >1 caméras
+
+$F = M^T E M$ où $E = RT$
+* $R$ : rot
+* $T$ : transl
+* $M$ : passage du $xyz$ absolu vers le repère de l'oeil ($z$ la profondeur etc)
+
+Toutes les mat ici sont en $4 \times 4$ : c de la géométrie projective
+
+$$
+\begin{align}
+T &= \begin{bmatrix}
+    I_3 & T_{3 \times 1} \\
+    0_{1 \times 3} & 1
+\end{bmatrix} \\
+R &= \begin{bmatrix}
+    R_{3 \times 3} & 0_{3 \times 1} \\\
+    0_{1 \times 3} & 1
+\end{bmatrix}
+\end{align}
+$$
+
+### Img
+
+Une img... c juste un tenseur (waw).
+D'ordre 2 si N&B, +1 si couleur ou_exclusif vidéo, et d'ordre 4 pr vidéo en couleurs. 
+* Pr grayscale, le clasico c faire la moyenne entre les 3 canaux
+
+Y a des espaces de couleur :
+* RGB : Red Green Blue
+* LAB : 
+* HSL : Hue (Teinte, c une couleur de l'arc-en-ciel) Saturation (pureté de la teinte) Luminance (éclairage)
+* YCDCR (Luminance Composante Bleue Commposante Rouge) : Luminance et Chrominance (cf. vieille vidéo d'*El Jj*) : l'oeil humain est en effet bcp + sensible à la luminance qu'à la chrominance (on peut donc la compresser sans pression)
+
+#### RGB
+
+* Avec du RGB à chaque canal est encodé sur 1 octet, ça donne $2^24 = 16 777 216$ couleurs possibles, et sur 2 octets, $2^48$ couleurs.
+
+#### Matlab
+
+```m
+img = imread("chemin")
+figure(1); imshow(img)
+% Classes d'entiers :
+% int8 à int64, et avec u devant pr unsigned
+% flottants : double, single
+```
+
+### Related fields
+
+* Computer graphics (3D (cf. mon moteur), ...)
+* Pattern recognition (très vaste, mm en linguistique)
+* Computer Vision (PAr)
+
+Sous-trucs
+* Compression d'img
+* VR, AR
+* ML
