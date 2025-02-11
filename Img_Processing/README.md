@@ -108,7 +108,7 @@ RGB et CMYK couvrent deux "gamuts" différents sur le graphe du TP de PCM sur la
 * Lecture entrelacée (rolling shutter)
 * Couleur par filtrage passe-bande
 
-## Formation d'img, avec M. A.
+## Introduction to img sensing and processing, avec M. A.
 
 Le partiel c un QCM. Le reste c des compte-rendus de BE
 
@@ -117,7 +117,6 @@ Le partiel c un QCM. Le reste c des compte-rendus de BE
 El big clasico modèle pinhole comme tjs.
 * Y a une focale $f$
 * On peut faire de la géométrie projective (finally, après 21 ans à attendre)
-* $x$ vers la gauche, $y$ vers le haut, et $z$ en profondeur
 
 #### Lim
 
@@ -128,27 +127,6 @@ El big clasico modèle pinhole comme tjs.
 * Spectre du visible
 * Synthèse additive (de couleur)
 
-#### >1 caméras
-
-$F = M^T E M$ où $E = RT$
-* $R$ : rot
-* $T$ : transl
-* $M$ : passage du $xyz$ absolu vers le repère de l'oeil ($z$ la profondeur etc)
-
-Toutes les mat ici sont en $4 \times 4$ : c de la géométrie projective
-
-$$
-\begin{align}
-T &= \begin{bmatrix}
-    I_3 & T_{3 \times 1} \\
-    0_{1 \times 3} & 1
-\end{bmatrix} \\
-R &= \begin{bmatrix}
-    R_{3 \times 3} & 0_{3 \times 1} \\\
-    0_{1 \times 3} & 1
-\end{bmatrix}
-\end{align}
-$$
 
 ### Img
 
@@ -186,3 +164,108 @@ Sous-trucs
 * Compression d'img
 * VR, AR
 * ML
+
+### Traitement d'img
+
+* Brève histoire diapo 29
+* Des applications des diapos 35 à au moins 50
+
+## Formation d'image, avec M. A.
+
+### 3D
+
+Toutes les mat ici sont en $4 \times 4$ : c de la géométrie projective (coord *hmgn*)
+* $x$ vers la gauche, $y$ vers le haut, et $z$ en profondeur
+* $R$ : rot
+* $T$ : transl
+* $P$ : projection
+$$
+M = Intrinsics \times P \times RT
+$$
+Où :
+$$
+\begin{align}
+T &= \begin{bmatrix}
+    I_3 & T_{3 \times 1} \\
+    0_{1 \times 3} & 1
+\end{bmatrix} \\
+R &= \begin{bmatrix}
+    R_{3 \times 3} & 0_{3 \times 1} \\\
+    0_{1 \times 3} & 1
+\end{bmatrix} \\
+P &= \begin{bmatrix}
+    1 & 0 & 0 & 0 \\
+    0 & 1 & 0 & 0 \\
+    0 & 0 & 1 & 0
+\end{bmatrix} \\
+Intrinsics &= \begin{bmatrix}
+    -f_{sx} & 0 & x_c' \\
+    0 & -f_{sy} & y_c' \\
+    0 & 0 & 1
+\end{bmatrix}
+\end{align}
+$$
+
+Vu qu'on identifie :
+$$
+\begin{bmatrix}
+    x \\
+    y \\
+    z \\
+    w
+\end{bmatrix} = \begin{bmatrix}
+    x/w \\
+    y/w \\
+    z/w \\
+    1
+\end{bmatrix}
+$$
+
+Bah $w = 0$ concerne les pts à l'infini (c justement le cas pas traité en euclien)
+
+Aussi ce qui est banger, c que mtn tout est liné, mm les transl, c juste multiplier (à gauche) par :
+$$
+T = \begin{bmatrix}
+    1 & 0 & 0 & t_x \\
+    0 & 1 & 0 & t_y \\
+    0 & 0 & 1 & t_z \\
+    0 & 0 & 0 & 1
+\end{bmatrix}
+$$
+
+Comme ça $x' = x + w t_x$ etc, et $w = w'$.
+
+Pr tourner autour de chaque axe :
+$$
+\begin{align}
+R_X &= \begin{bmatrix}
+    1 & 0 & 0 & 0 \\
+    0 & c \theta & -s \theta & 0 \\
+    0 & s \theta & c \theta & 0 \\
+    0 & 0 & 0 & 1
+\end{bmatrix} \\
+R_Y &= \begin{bmatrix}
+    c \theta & 0 & s \theta & 0 \\
+    0 & 1 & 0 & 0 \\
+    -s \theta & 0 & c \theta & 0 \\
+    0 & 0 & 0 & 1
+\end{bmatrix} \\
+R_Z &= \begin{bmatrix}
+    c \theta & -s \theta & 0 & 0 \\
+    s \theta & c \theta & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+\end{bmatrix} \\
+\end{align}
+$$
+
+
+
+#### >1 caméras
+
+$F = M^T E M$ où mat essentielle $E = RT$
+* $R$ : rot
+* $T$ : transl
+* $M$ : passage du $xyz$ absolu vers le repère de l'oeil ($z$ la profondeur etc)
+
+Disparité (diapo 28 qui a l'air banger) :
