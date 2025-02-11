@@ -100,10 +100,14 @@ Ah le fameux $0,3R + 0,6G + 0,1B$.
 Y a aussi l'encodage CMYK (*cyan, magenta, jaune, noir*), auquel cas le blanc c #00000000.
 RGB et CMYK couvrent deux "gamuts" différents sur le graphe du TP de PCM sur la couleur (celui avec les couleurs pures sur le bord)
 
-## Concl
+### Concl
 
 * CMOS partt
 * Photodiode
 * RSB surtt en faible lum, à cause du $I_S$
 * Lecture entrelacée (rolling shutter)
 * Couleur par filtrage passe-bande
+
+## Formation d'img, avec M. A.
+
+Le partiel c un QCM. Le reste c des compte-rendus de BE
