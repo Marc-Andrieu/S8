@@ -111,3 +111,9 @@ RGB et CMYK couvrent deux "gamuts" différents sur le graphe du TP de PCM sur la
 ## Formation d'img, avec M. A.
 
 Le partiel c un QCM. Le reste c des compte-rendus de BE
+
+### Camera
+
+El big clasico modèle pinhole comme tjs.
+* Y a une focale $f$
+* On peut faire de la géométrie projective (finally, après 21 ans à attendre)
