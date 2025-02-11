@@ -1,3 +1,4 @@
+% cd Img_Processing/BE1
 % I
 A = eye(3);
 B = [3 2 4;
