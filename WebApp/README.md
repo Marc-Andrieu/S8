@@ -182,6 +182,41 @@ Avec `arguments`, comme `*args` en Py :
 
 #### De 1e classe
 
+En JS, les fn sont des *first-class citizens*, *ie.* des objets avec attr et methods.
+
+```js
+ma_fn = (n) => {n * n}
+ma_fn.length; // 1 car 1 args
+ma_fn.call(null, 42); // 1764
+[9, 6, 3].sort(
+    (a, b) => {return a - b;} // fn de comparaison
+) // [3, 6, 9]
+```
+
+Les fn flèches n'ont pas `this` ds leur contexte (moi non plus jsp pk) :
+```js
+dico = {
+    attr = "truc",
+    method1: function(p) {console.log(this[p]);},
+    method2: p => {console.log(this[p]);},
+}
+dico.method1("attr"); // "truc"
+dico.method2("attr"); // undefined
+```
+
+* On peut imbriquer des fn (déclarer `sub_fn` ds `fn`), auquel cas `sub_fn` est locale et peut servir à override un `sub_fn` global (car une var (*e.g.* une fn) est)
+* Clôtures : en gros, si une fn1 renvoie une fn2 et que fn2 se sert d'une var locale, bah la var locale est pas détruite par le garbage collector, du coup ça agit comme une var statique :
+```js
+incr = function() { // renvoie une fn
+    var value = 0; // var "stat"
+    return function() { // fn d'incr refaite
+        return value++;
+    }
+}();
+incr(); // 1
+incr(); // 2
+``` 
+
 ### Variables
 
 * Une var est *déclarée* si y a un `var, let` ou `const` devant
@@ -326,10 +361,50 @@ try {
         console.log(e.name + ': ' + e.message);
     }
 }
-
 ```
 
+### Prototypes
 
+Y a pas d'héritage, instead, on "clone" et on modif.`
+```js
+var parent = ...;
+var enfant = Object.create(parent);
+// Object.getPrototypeOf(eve) c bien parent
+// Achtung, modif parent après coup va aussi modif enfant
+
+for (attr in object) {} //oui on peut itérer sur les attrs
+```
+
+#### Constructeurs
+
+```js
+function Truc(nom) {
+ this.arg = arg;
+}
+truc = new Truc(arg); // le new sert à ce que le this réfère à un nouvel Object, qui est celui retourné, au lieu de l'Objet global
+```
+
+#### Classes
+
+```js
+class Classe {
+    constructor(arg) { // keyword constructor pr init
+        this.arg = arg;
+    }
+    method() { // pas de "function" devant les methods
+        return this.arg
+    }
+    get mon_arg() {
+        return this.arg
+    }
+    set mon_arg(arg2) {
+        return this.arg = arg2
+    }
+}
+var mon_instance = new Classe(arg);
+mon_instance.mon_arg;
+mon_instance.
+```
 
 ### Vrac
 
