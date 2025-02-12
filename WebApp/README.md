@@ -400,11 +400,57 @@ class Classe {
     set mon_arg(arg2) {
         return this.arg = arg2
     }
+    static fn_de_classe() {
+        return "Une bonne grosse constante"
+    }
+    // aussi static get et static set
 }
 var mon_instance = new Classe(arg);
 mon_instance.mon_arg;
-mon_instance.
+mon_instance.mon_arg = arg2;
+Classe.fn_de_classe();
+
+// "Héritage"
+class SousClasse extends Classe {
+    constructor(arg) ={super(arg);}
+}
+
 ```
+
+#### Que vaut `this` ?
+
+* Globalement : `window` (ou `module.exports` en node.js)
+* Constructeur : le nouvel objet
+* Mehhod : l'objet sur lequel la method a été appelée
+* Fn classique : comme en global, par contre vaut `undefined` en mode strict
+* Fn flèche : change par la valeu qu'il a à l'étage supérieur
+
+### DOM (enfin !)
+
+```js
+var elem = document.getElementById("id");
+elem.style.backgroundColor; //etc
+document.getElementsByClassName("nom");  // c bien une liste !
+document.getElementsByTagName("tag"); // tag = balise
+document.querySelector("sel"); // pr toucher du CSS
+document.querySelectorAll("sel");
+document.createElement("tag");
+elem.appendChild(elem);
+document.createTextNode(texte);
+elem.insertBefore(nouv_elem, ref_elem)
+
+node.parentNode //élém
+node.childNodes //liste d'éléms
+node.firstChild
+node.lastChild
+node.previousSibling
+node.nextSibling
+node.nodeValue // "le node est la clé"
+node.getAttribute(attr) // au cas où ce node a des attr qui eux-mm ont des vals
+node.setAttribute(attr, val)
+```
+
+
 
 ### Vrac
 
