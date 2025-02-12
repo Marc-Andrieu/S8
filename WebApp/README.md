@@ -180,6 +180,8 @@ Avec `arguments`, comme `*args` en Py :
 }
 ```
 
+#### De 1e classe
+
 ### Variables
 
 * Une var est *déclarée* si y a un `var, let` ou `const` devant
@@ -283,11 +285,11 @@ n.toString()
 Math.PI // et qlq autres constantes
 Math.min() // et plein d'autres methods
 
-// String
-// plein de methods : startsWith, endsWith, includes, 
-// à la regex : match, replace, search, slice, split, substring,
-// autres : normalize, toLocaleLowerCase(), toLowerCase()
-// etc
+/* String
+plein de methods : startsWith, endsWith, includes, 
+à la regex : match, replace, search, slice, split, substring,
+autres : normalize, toLocaleLowerCase(), toLowerCase()
+etc */
 
 // JSON : 2 methods et c tout
 JSON.stringify({}); // serialization
@@ -299,7 +301,35 @@ t.length = n; // tronque le tableau
 a = [42];
 b = a; // pointent vers la mm adresse
 a[0] = 30; // désormais b pointe aussi sur [30]
+/* vla les méthodes :
+Array.from("str"), .concat([42]).indexOf(elem), .join("str"), .lastIndexOf(elem), .slice(index1, index2), .toString(), .toLocaleString(), .copyWithin(), .fill(), .pop(), .push(), .reverse(), .shift(), .sort(), .splice(), .unshift(), .entries(), .every(), .filter(), .find(), .findIndex(), .forEach(), .keys(), .map(), .reduce(), .reduceRight(),
+.some(), .values()
+*/
+
+// Date
+mtn = new Date();
+date1 = new Date(1739344350); //timestamp Unix
+date2 = new Date(année, ...)
+/* encore vla les methods :
+setTime(), set(), setUTC(), getTime(), get(), getUTC(), getTimezoneOffset(), des conversions vers String de toutes sortes, vers JSON, etc.
+*/
+
+// RegEXp
+regex = /mon regex ici/g;
+// .match, .search, .replace, etc.
+
+// Error (ouais y a un objet Error)
+try {
+    instr douteuses;
+} catch (e) {
+    if (e instanceof SyntaxError) {
+        console.log(e.name + ': ' + e.message);
+    }
+}
+
 ```
+
+
 
 ### Vrac
 
