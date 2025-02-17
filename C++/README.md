@@ -400,6 +400,8 @@ pt -> attr1 = 3.14; // pr ut la valeur de attr1
 ### Classe : public et privé
 
 ```cpp
+#include <iostream>
+using namespace std;
 class NomClasse { // ouais, struct devient class, tqt
 	public:
 		NomClasse (type arg); // C le *constructeur*
@@ -419,6 +421,130 @@ NomClasse::NomClasse (type arg) { // impl d'un constructeur
 ### Constructeur
 
 * Ca sert à s'assurer qu'à la déclaration d'un objet, il soit bien bien initialisé (attr définis).
+
+Y a 3 constructeurs :
+* Par défaut
+* Autres avec des vals par défaut
+* De recopie
+
+#### Par défaut
+
+```cpp
+//.cc pr class
+class MaClasse {
+	public:
+		MaClasse(); // constructeur par défaut
+		MaClasse (int attr); // autre constructeur, sans vals par défaut
+		MaClasse(int attr = 0); // autre constructeur, avec vals par défaut
+		MaClasse(const MaClasse &P); // constructeur par recopie
+		~MaClasse(); // destructeur
+		void method1();
+		void operator=(X&); // on peut avoir des opérateurs custom
+	private:
+		int attr;
+}
+
+//.h pr header
+MaClasse::MaClasse() {attr = 0;} // constructeur par défaut
+MaClasse::MaClasse(int attr1) {attr = attr1;} //autre constructeur avec vals par défaut
+MaClasse::MaClasse(const MaClasse &P) {
+	//mot-clé "this" pr auto-référence
+	attr = P.attr;
+	tab = new double[attr]
+	for (int i = 0; i < attr; i++) tab[i] = p.tab[i];
+}
+MaClasse& MaClasse::operator=(const MaClasse &P) {
+	if (this != &P) {
+		delete [] tab;
+		attr = P.attr;
+		tab = new double[attr];
+		for (int i = 0; i < attr; i++) tab[i] = p.tab[i];
+	}
+	return *this;
+}
+
+//.cpp
+// Allocation statique
+MaClasse mon_instance1; //pas de ()
+MaClasse mon_instance2(42);
+mon_instance1.method1();
+
+MaClasse mon_instance3(mon_instance2); // constructeur de recopie, il existe par défaut
+
+// Allocation dynamique
+MaClasse *pt_mon_instance = new MaClasse(42);
+pt_mon_instance -> method1();
+delete pt_mon_instance;
+```
+
+### Destructeur
+
+A la fin de l'exéc d'un prog, y a automatiquement un appel au destructeur par défaut.
+
+Parfois faut le surcharger
+
+```cpp
+// ds la classe, on a un attr double *tab, tab de flottants
+MaClasse::MaClasse(...) // ça ct le constructeur
+MaClasse::~MaClasse(...) { // ça c le destructeur
+	if (tab != NULL) {
+		delete [] tab; // on lib le tab
+		tab = NULL; // on remet à null le pointeur
+	}
+}
+
+```
+
+### Fonction amie
+
+C bien une fn, pas une method.
+Déclarée que ds le `.h`.
+Possède les mm droits qu'une method, donc peut accéder aux attr privés. 
+
+```cpp
+// .cc
+...
+	int method1();
+	friend int fn_ami(MaClasse A, MaClasse B);
+
+int fn_ami(MaClasse A, MaClasse B) {
+	if (A.attr == B.attr) return 1; else return 0; // accès aux attrs privés
+}
+```
+
+### Opérateurs
+
+Peut être défini comme opérateur ami (fn) ou opérateur membre (method).
+
+```cpp
+// Ex : addition de deux points
+// .cc
+# nclude <iostream>
+using namespace std;
+class point {
+	public:
+		point (int x1 = 0, int y1 = 0);
+		friend point operator+(const point &A, const point& B); // c un ami, vu que ça peut pas être une method (tu renvoies un nouvel objet)
+		point& operator +=(const point& A);
+	private:
+		int x, y;
+};
+
+//.h
+#include "point.h"
+point::point(int x1, int y1) {x = x1; y = y1;}
+point operator+(const point &A, const point &B) {
+	point C(A.x+B.x,A.y+B.y);
+	return C;
+}
+point& point::operator+=(const point &A) {
+	x+=A.x; y+=A.y;
+	return *this;
+}
+
+```
+
+On peut aussi surcharger `<<` et `>>` de `ostream` (vers la diapo 64).
 
 ## Vrac
 
