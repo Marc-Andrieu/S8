@@ -1,7 +1,5 @@
 import matplotlib.pyplot as plt 
 import numpy as np
-import math
-
 n = 15
 B = np.random.rand(n, n)
 A = B.T @ B
