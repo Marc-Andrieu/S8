@@ -268,7 +268,7 @@ $F = M^T E M$ où mat essentielle $E = RT$
 
 Disparité (diapo 28 qui a l'air banger) :
 
-## Intensoty Transformation and Spatial Filtering, zvc M. A.
+## Intensity Transformation and Spatial Filtering, zvc M. A.
 
 * Notion de voisins (mat 3 $\times$ 3)
 * Une image [en niv de gris] c $f : \mathbb{N}^2 \to \mathbb{N}$ une intensité par pixel
@@ -338,8 +338,37 @@ f(x; y) &= \frac{1}{MN} \sum_{u = 0}^{M - 1} \sum_{v = 0}^{N - 1} F(u; v) \mathr
 \end{align}
 ```
 
-### Image reszing - Interpolation
+Les discrétisations sont reliées en échelle par $\displaystyle \Delta u = \frac{1}{M\Delta T}, \Delta v = \frac{1}{N\Delta Z}$
+
+#### Propriétés en 2D
+
+Transl et rot :
+```math
+\begin{align}
+f(x; y) \mathrm{exp} \left(-2 j \pi \left( \frac{u_0 x}{M} + \frac{v_0 y}{N} \right) \right) &= F(u - u_0; v - v_0) \\
+f(x - x_0; y - y_0) &= F(u; v) \mathrm{exp} \left(+2 j \pi \left( \frac{u_0 x}{M} + \frac{v_0 y}{N} \right) \right) \\
+f(r; \theta + \theta_0) &= F(\varpi; \varphi + \theta_0), x = r \mathrm{cos} \theta, y = r \mathrm{sin} \theta, u = \varpi \mathrm{cos} \varphi, v = \varpi \mathrm{sin} \varphi
+\end{align}
+```
+
+Bref un joli tableau diapo 35
+
+#### Img smoothing
+
+## Image reszing - Interpolation
 
 Pr zoomer,dézoomer, tourner, corrections géom, etc
 * Nearest neighbor interpolatin : on ft pareil qu'un des voisins
 * Bicubic interpolation : fait intervenir les 16 (16?) + proches voisins
+
+## Img compression based on freq
+
+* Comme dit ds la vieille vidéo d'el Jj, l'oeil humain est bcp + sensible à la luminance (aux formes), qu'à la chrominance (auw couleurs), donc les trucs à 16777216 couleurs ça sert à rien, en baissant à 256 on voit mm pas la différence
+* Compression pr stockage et transm
+* Ms faut choisir une complexité algorithmique pr la compr et la décompr, la qualité perdue (en avec perte), à quoi on touche (couleur, ...), etc.
+* Compression basée sur :
+    * L'entropie : c comme ds mon appro de théorie de l'information, Huffman
+        * VLC (Variable-length coding) : utiliser les freqs (au sens de "à quel point ce symbole est souvent utilisé ?") pr ajuster le code, genre Huffman, codage de source (cf. mon appro pr tt ça)
+    * La source (?), FFT; subsampling (réduire le nbr de variantes de qqch utilisées psk l'oeil humain fera pas vrmt la diff)
+        * Subsampling : écrit en format A:B:C (e.g. 4:2:2), resp. référence, le nbr de chrominance ds la 1e ligne, et pareil pr la luminance (c pas clair ms je fais avec le cours)
+        * RLC (Redundancy-based methods) : e.g. `2bccccccefeel -> 2b#6cef#2el`
