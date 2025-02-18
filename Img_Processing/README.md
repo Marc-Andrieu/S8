@@ -259,8 +259,6 @@ R_Z &= \begin{bmatrix}
 \end{align}
 $$
 
-
-
 #### >1 caméras
 
 $F = M^T E M$ où mat essentielle $E = RT$
@@ -269,3 +267,65 @@ $F = M^T E M$ où mat essentielle $E = RT$
 * $M$ : passage du $xyz$ absolu vers le repère de l'oeil ($z$ la profondeur etc)
 
 Disparité (diapo 28 qui a l'air banger) :
+
+## Intensoty Transformation and Spatial Filtering, zvc M. A.
+
+* Notion de voisins (mat 3 $\times$ 3)
+* Une image [en niv de gris] c $f : \mathbb{N}^2 \to \mathbb{N}$ une intensité par pixel
+* Transformation d'intensité c $T: \mathbb{N} \to \mathbb{N}$ avec l'img transformée qui est $g = T \circ f$
+    * E. g. un contrast stretching ça a une forme de sigmoïde
+    * Un négatif c $T : r \mapsto \mathrm{max}(L - 1 - r; 0)$ où l'intensité est ds $[0; L - 1]$
+    * Une log-transformation c $r \mapsto \mathrm{log}(1 + r)$
+    * Transformations puissance (gamma) : $r \mapsto c r^\gamma$
+        * $\gamma > 1$ pr de la corr
+        * $\gamma < 1$ pr toucher au contraste
+    * Piecewise-linear (liné par morceau)
+* Qlq fn Matlab utiles :
+    * `imcomplement(M)` pr le négatif
+    * `mat2gray(M)` pr display une mat en tant qu'img N&B
+    * `im2uint8(M)` pr mult la mat par un scalaire pr l'avoir ds $\mathcal{M}([0; 255])$
+    * `imadjust(M, [x_min, x_max], [y_min, y_max], gamma)` pr appl la transf gamma avec fn cste hors.
+    * `imhist(M, b)` pr hist d'une img en N&B (jsp c quoi `b`)
+        * `imhist(M, b) / numel (M)` pr normaliser l'histogramme
+        * A propos d'égalisation d'histogramme : en gros on applique une transf qui est une intégrale, ça ft un peu passe-bas et ça permet de mieux distribuer les niveaux de gris : $\displaystyle T(r) = (L - 1) \int_0^r p_r(w) \mathrm{d}w$. En Matlab : `histeq(M, 256)`
+
+### Filtrage : Spatial
+
+* Convol avec un masque/kernel/template/fenêtre, bref plein de mots pr parler d'une mat de ptite taille
+$$
+g(x; y) = \sum_{s = 0}^{m/2} \sum_{t = 0}^{n/2} w(s; t) f(x + s; y + t)
+$$
+* Par contre pr les petits masques, ça peut donner un effet de quadrillage
+* Fun fact : les filtres liné sont liné. Ah et ils commutent avec les fn de shift (décalage).
+    * Rappel : la convol ça ft un groupe abélien, ça commute avec la multiplication externe (par un scalaire), et c distributif sur l'addition. Bref, avec $+$ et $*$ on a un anneau
+* Filtre gaussien : en Matlab c juste `fspecial('gaussian', taille, 1)`
+$$
+G_{\sigma} : (x; y) \mapsto \frac{1}{2 \pi \sigma^2} \mathrm{exp} \left( \frac{-(x^2 + y^2)^2}{2 \sigma^2} \right)
+$$
+* Les filtres gaussiens :
+    * Sont passe-bas (logique ils sont en cloche donc leur TF aussi)
+    * Stables par convol (ouais si tu convolues deux filtres gaussien ça reste un filtre gaussien)
+    * Se factorisent en du $U^T V$ des vecteurs gaussiens
+* Bilateral filtering : filtre liné + rejet des outliers (c mettre un seuil nan ?)
+
+#### Filtres spatiaux de contraste (sharpening spatial filters)
+
+* Le laplacien $\nabla^2$ (en convoluant par `fspecial('laplacian')`), très pratique
+* $\mathrm{Id} + c\nabla^2$ pr augmenter le constraste
+* Le gradient
+* Filtre de Sobel : vertical (`fspecial('Sobel')` en Matlab)
+```math
+\begin{bmatrix}
+    1 & 0 & -1 \\
+    2 & 1 & -2 \\
+    1 & 0 & -1
+\end{bmatrix}
+```
+
+En horizontal c la transposée et celui-là
+
+### Image reszing - Interpolation
+
+Pr zoomer,dézoomer, tourner, corrections géom, etc
+* Nearest neighbor interpolatin : on ft pareil qu'un des voisins
+* Bicubic interpolation : fait intervenir les 16 (16?) + proches voisins
