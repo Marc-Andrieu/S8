@@ -59,9 +59,9 @@ BTW, une photodiode c juste une diode disséquée et on balance de la lumière d
 
 Fonctionnement : y a une jonction PN clasico, avec un champ élec $E$ fort de $N$ vers $P$, donc un tout petit courant de fuite $I_S$ de $N$ vers $P$ (les $e^-$ arrivent pas à s'opposer à $E$).
 L'exposition à la lumière ça translate juste la caractéristique vers le bas :
-$$
+```math
 I = f(V_d) = I_S \times \left(\mathrm{exp} \left(\frac{q V_d}{kT} \right) - 1 \right) - I_{ph}
-$$
+```
 
 Le schéma équivalent de la photodiode c 3 trucs en parallèle :
 * Un générateur de courant $I_{ph}$
@@ -179,7 +179,7 @@ Toutes les mat ici sont en $4 \times 4$ : c de la géométrie projective (coord 
 * $R$ : rot
 * $T$ : transl
 * $P$ : projection
-$$
+```math
 M = Intrinsics \times P \times RT
 $$
 Où :
@@ -204,10 +204,10 @@ Intrinsics &= \begin{bmatrix}
     0 & 0 & 1
 \end{bmatrix}
 \end{align}
-$$
+```
 
 Vu qu'on identifie :
-$$
+```math
 \begin{bmatrix}
     x \\
     y \\
@@ -219,24 +219,24 @@ $$
     z/w \\
     1
 \end{bmatrix}
-$$
+```
 
 Bah $w = 0$ concerne les pts à l'infini (c justement le cas pas traité en euclien)
 
 Aussi ce qui est banger, c que mtn tout est liné, mm les transl, c juste multiplier (à gauche) par :
-$$
+```math
 T = \begin{bmatrix}
     1 & 0 & 0 & t_x \\
     0 & 1 & 0 & t_y \\
     0 & 0 & 1 & t_z \\
     0 & 0 & 0 & 1
 \end{bmatrix}
-$$
+```
 
 Comme ça $x' = x + w t_x$ etc, et $w = w'$.
 
 Pr tourner autour de chaque axe :
-$$
+```math
 \begin{align}
 R_X &= \begin{bmatrix}
     1 & 0 & 0 & 0 \\
@@ -257,7 +257,7 @@ R_Z &= \begin{bmatrix}
     0 & 0 & 0 & 1
 \end{bmatrix} \\
 \end{align}
-$$
+```
 
 #### >1 caméras
 
@@ -292,7 +292,7 @@ Disparité (diapo 28 qui a l'air banger) :
 ### Filtrage : Spatial
 
 * Convol avec un masque/kernel/template/fenêtre, bref plein de mots pr parler d'une mat de ptite taille
-$$
+```math
 g(x; y) = \sum_{s = 0}^{m/2} \sum_{t = 0}^{n/2} w(s; t) f(x + s; y + t)
 $$
 * Par contre pr les petits masques, ça peut donner un effet de quadrillage
@@ -301,7 +301,7 @@ $$
 * Filtre gaussien : en Matlab c juste `fspecial('gaussian', taille, 1)`
 $$
 G_{\sigma} : (x; y) \mapsto \frac{1}{2 \pi \sigma^2} \mathrm{exp} \left( \frac{-(x^2 + y^2)^2}{2 \sigma^2} \right)
-$$
+```
 * Les filtres gaussiens :
     * Sont passe-bas (logique ils sont en cloche donc leur TF aussi)
     * Stables par convol (ouais si tu convolues deux filtres gaussien ça reste un filtre gaussien)
@@ -323,6 +323,20 @@ $$
 ```
 
 En horizontal c la transposée et celui-là
+
+### Filtrage : Fréquentiel
+
+* A propos d'aliasing : c du "lissage" ms qui rend moche, ça crée des artéfacts et de la distorsion. Et ds une vidéo, c par ex le ft de voir une roue ou une hécile tourner ds le mauvais sens.
+* La convol spatiale qui devient un produit fréquentiel
+
+#### DFT and iDFT
+
+```math
+\begin{align}
+F(u; v) &= \sum_{x = 0}^{M - 1} \sum_{y = 0}^{N - 1} f(x; y) \mathrm{exp} \left(-2 j \pi \left( \frac{ux}{M} + \frac{vy}{N} \right) \right) \\
+f(x; y) &= \frac{1}{MN} \sum_{u = 0}^{M - 1} \sum_{v = 0}^{N - 1} F(u; v) \mathrm{exp} \left(+2 j \pi \left( \frac{ux}{M} + \frac{vy}{N} \right) \right)
+\end{align}
+```
 
 ### Image reszing - Interpolation
 
