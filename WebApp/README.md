@@ -425,33 +425,6 @@ class SousClasse extends Classe {
 * Fn classique : comme en global, par contre vaut `undefined` en mode strict
 * Fn flèche : change par la valeu qu'il a à l'étage supérieur
 
-### DOM (enfin !)
-
-```js
-var elem = document.getElementById("id");
-elem.style.backgroundColor; //etc
-document.getElementsByClassName("nom");  // c bien une liste !
-document.getElementsByTagName("tag"); // tag = balise
-document.querySelector("sel"); // pr toucher du CSS
-document.querySelectorAll("sel");
-document.createElement("tag");
-elem.appendChild(elem);
-document.createTextNode(texte);
-elem.insertBefore(nouv_elem, ref_elem)
-
-node.parentNode //élém
-node.childNodes //liste d'éléms
-node.firstChild
-node.lastChild
-node.previousSibling
-node.nextSibling
-node.nodeValue // "le node est la clé"
-node.getAttribute(attr) // au cas où ce node a des attr qui eux-mm ont des vals
-node.setAttribute(attr, val)
-```
-
-
-
 ### Vrac
 
 ```js
@@ -461,3 +434,154 @@ import
 export
 throw
 ```
+
+## Le DOM
+
+C un ens d'API standardisées, indép de la plateforme et du langage, pr accéder au contenu, struc et style des HTML et XML.
+
+
+### DOM Core
+
+Du HTML c juste un arbre.
+`Document` c'en est la racine, `Element` c la liste de ceux ayant une mm balise, `Text` c le contenu textuel d'un.
+
+BTW, elem et noeud c pareil.
+
+```js
+var elem = document.getElementById("id");
+var couleur = elem.style.backgroundColor; //etc
+var ls = document.getElementsByClassName("nom");
+var ls = document.getElementsByTagName("tag"); // tag = balise
+var elem = document.querySelector("sel"); // pr toucher du CSS
+var ls = document.querySelectorAll("sel");
+document.createElement("tag");
+document.createTextNode(texte);
+createElement("tag");
+createTextNode("txt");
+createAttribute("attr");
+var frag = document.createDocumentFragment();
+var txt = txt.splitText(offset); // offset c un entier
+
+elem.appendChild(elem);
+elem.insertBefore(nouv_elem, ref_elem);
+elem.replaceChild(nouv_elem, ancien_elem);
+elem.removeChild(elem);
+var elem = elem.cloneNode(bool); // si true, c une deep copy
+var val = elem.getAttribute(attr); // au cas où ce node a des attr qui eux-mm ont des vals
+elem.setAttribute(attr, val);
+elem.removeAttribute(attr);
+var bool = elem.hasAttribute(attr);
+var bool = hasChildNodes(elem);
+
+
+
+elem.parentNode //élém
+elem.childNodes //liste d'éléms
+elem.firstChild
+elem.lastChild
+elem.previousSibling
+elem.nextSibling
+elem.nodeValue // "le node est la clé"
+elem.nodeName
+elem.nodeType
+```
+
+Exemple pr créer une matrice 3 $\times$ 3:
+```js
+var n, tr, i, td, txt                       // variables locales
+   , table = document.createElement('table') // création de la table
+ ;
+ for ( n = 0; n < 3; n++ ) {                 // boucle sur les lignes
+   tr = document.createElement('tr');        // création d'un élément tr
+   for ( i = 0; i < 3; i++ ) {               // boucle sur les cellules
+     td = document.createElement('td');      // création d'un élément td
+     txt = document.createTextNode(1+i+n*3); // création d'un noeud texte
+     td.appendChild(txt);                    // ajout du texte au contenu de la cellule
+     tr.appendChild(td);                     // ajout de la cellule au contenu de la ligne
+   }                                         // fin de la boucle sur les cellules
+   table.appendChild(tr);                    // ajout de la ligne au contenu de la table
+ }                                           // fin de la boucle sur les lignes
+ p2.parentNode.insertBefore(table,p2);       // ajout de la table au contenu du document
+```
+
+### DOM HTML
+
+Ca simplifie pas mal de truc par rapport au DOM Core
+
+```js
+var img = document.createElement('img');
+img.setAttribute('src','logo.png'); // en DOM Core
+img.src = "logo.png"; // pareil ms en DOM HTML
+
+document.URL;
+document.domain;
+document.referrer;
+document.lastModified;
+document.cookie;
+```
+
+### DOM Events
+
+```js
+// <button onclick="fn(arg)"> Bonjour ! </button>
+elem.addEventListener('click', ma_fn); // y a aussi 'mousedown', 'onmouseup', 'onmouseout', 'onmousemove'
+// 'focus' qd gagne le focus, 'blur' qd perd le focus
+// si y a un 3e arg valant true, alors on trigger aussi le parent, et ce, avant l'enfant
+elem.removeEventListener('click');
+elem.dispatchEvent('click'); // pr simuler que ça a eu lieu
+// ma_fn prend 1 arg "Event e"
+e.stopPropagation() // pr éviter de trigger l'enfant aussi
+// y a des events "bouillonnants", ie. qui trigger le child avant le parent
+var elem = e.target; // l'elem qui a trigger l'event
+var elem = e.currentTarget; // ?
+var bool = bubbles; // bouillonnant
+var bool = cancelable; //
+var fenetre = e.view; //
+var truc = e.detail; // dépend du type d'event
+// interface MouseEvent : longs entiers screenX, screenY, clientX, clientY, bools ctrlKey, shiftKey, altKey
+// diverses interfaces InputEvent, KeyboardEvent
+```
+
+## Ajax
+
+*Asynchronous Javascript And XML* (AJAX) mm si porte mal son nom aujd, déjà vu qu'aujd on est surtt JSON.
+
+```js
+var r = new XMLHttpRequest();
+r.onload = function() {
+    var reponse = this.responseText;
+};
+r.open("GET", "URL", true);
+r.addEventListener("progress", e => {}) // pr une progressbar
+// peut déclencher des events comme load, error, progress et abort
+r.send();
+r.status;
+r.getResponseHeader();
+```
+
+Pr un `POST` :
+```js
+form.onsubmit = function(e) {
+// empêche le remplacement de la page par la réponse du service
+    e.preventDefault();
+    let request = new XMLHttpRequest();
+    request.onload = function() {}; // on traite la réponse
+    query_string = [form[1],form[2]].map(f =>
+        encodeURIComponent(f.name)+'='+encodeURIComponent(f.value)
+    ).join('&');
+    request.open("POST", "URL", true);
+    request.setRequestHeader(
+        'Content-Type', 'application/x-www-form-urlencoded');
+    request.send(query_string);
+}
+
+```
+
+### CORS
+
+Sinon, giga faille2sécu : si on a un onglet où on est authentifié à un site, et un autre sur un site malveillant, il pourrait utiliser les cookies (c le lien avec Ajax) pr usurper mon identité et voler mes données.
+
+C les fameux headers `Origin, Access-Control-Allow-Origin`.
+Bref, le CORS c nécessaire pr faire fonctionner Ajax.
+Dès qu'on ft autre chose que du GET, faut caser le OPTIONS avant.
+
