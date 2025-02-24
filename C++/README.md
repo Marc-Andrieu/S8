@@ -7,6 +7,9 @@
 
 [Lien du cours](http://perso.ec-lyon.fr/derrode.stephane/Teaching/ECL2A3A/ECL2A_C%2B%2B)
 
+> IMPORTANT
+> Y A DES "CORRECTIONS" DES TD, QUI SONT ASSEZ PROPRES
+
 ## Un peu d'histoire
 
 * `C` (1972, *Ken Thompson* ce **GOAT**) après `B`, pr réécrire `UNIX`
@@ -91,7 +94,7 @@ endl; // "endline", c \n
 (ça termine avant d'echo qqch ds stdout),
 on ajoute ces 2 lignes après les `cout <<` */
 cin.ignore();
-cin.get()
+cin.get();
 ```
 
 ### Fortement typé
@@ -726,6 +729,7 @@ try {
 } catch(int n) { // code d'err
 	instr;
 } catch(const char* msg) { // msg d'err
+	cout << endl<< msg;
 	instr;
 } catch(bad_alloc) { // natif
 } catch(...) { // 
@@ -743,6 +747,25 @@ float racine(double d) {
 		throw 1;
 	return sqrt(d)
 }
+```
+
+Pr créer une classe qui hérite d'exception :
+```cpp
+//.cpp
+
+#ifndef MONEXC_H
+#define MONEXC_C
+
+class mon_exc: public exception {
+	public:
+		mon_exc(int pos, int arg) throw();
+		virtual const char* what() const throw();
+	private:
+		type arg;
+		string answer;
+}
+
+#endif
 ```
 
 #### Liste d'initialisation
