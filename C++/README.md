@@ -427,6 +427,14 @@ Y a 3 constructeurs :
 * Autres avec des vals par défaut
 * De recopie
 
+#### A programmer systématiquement si classe à allocation dynamique
+
+* Constructeur par recopie : pr bien recopier chaque truc
+* opérateur d'affectation : idem
+* Destructeur : sinon on delete pas tout
+
+Ces 3-là ds le cas où la classe en question alloue de la mémoire dynamiquement (on connaît pas *a priori* la taille alloué à une instance)
+
 #### Par défaut
 
 ```cpp
@@ -534,7 +542,7 @@ class point {
 #include "point.h"
 point::point(int x1, int y1) {x = x1; y = y1;}
 point operator+(const point &A, const point &B) {
-	point C(A.x+B.x,A.y+B.y);
+	point C(A.x + B.x, A.y + B.y);
 	return C;
 }
 point& point::operator+=(const point &A) {
@@ -546,8 +554,215 @@ point& point::operator+=(const point &A) {
 
 On peut aussi surcharger `<<` et `>>` de `ostream` (vers la diapo 64).
 
+
+### A caser qlq part
+
+#### Alloc stat et dyna
+
+```cpp
+main () {
+	Vect T(10); // alloc stat
+	Vect *pV = new Vect(42); // alloc dyna
+	pV -> ma_method(args);
+	delete pV;
+}
+```
+
+#### Un tableau de 3 "Vect"
+
+```cpp
+main () {
+	Vect** pV = new Vect*[3];
+	for (int i = 0, i < 3, i++) {
+		pV[i] = new Vect[10];
+	}
+	pV[0] -> ma_method(args);
+	}
+```
+
+#### Destructeur de ça
+
+```cpp
+for (int i = 0, i < 3, i++) {
+	delete pV[i]; // on kill tous les elems deds
+}
+delete [] pV; // on kill le tableau
+```
+
+### Classe générique
+
+* Aussi appelées *patrons* ou *modèles de classes*, ça sert à créer des classes qui ont un type (en ft, une classe) comme param, *e.g.* typiquement un vecteur d'objets d'une mm classe qlqconque.
+* Ds ce cas, toute la classe est ds le `.h` !
+
+```cpp
+// point.h
+#include <iostream>
+using namespace std;
+
+template <class T>
+class point {
+	public:
+		point(T x1, T y1) {
+			x = x1;
+			y = y1
+		}
+		void deplace(T d) {
+			x += d;
+			y += d;
+		}
+		T getX() {return x;}
+	private:
+		T x, y;
+}
+```
+
+### Dérivation et composition : revoir diapos 68 à ~70
+
+Une classe est composée si ses attr sont des objets :
+```cpp
+class MaClasse {
+	public:
+		MaClasse(...);
+	private:
+		...
+}
+```
+
+Une classe est dérivée si apporte une info en + à la classe mère :
+```cpp
+//classederivee.h
+class ClasseDerivee : public ClasseMere {
+	public:
+		ClasseDerivee(arg1, arg2); // constructeur par défaut, en héritage
+		ClasseDerivee(ClasseDerivee &C); // constructeur par recopie, en héritage
+		operator=(ClasseDerivee& C); // opérateur d'affectation
+		type ClasseDerivee::ma_method(args); // pr surcharger une method de la classe mère
+	private:
+		...
+}
+
+//classederivee.cpp
+ClasseDerivee::ClasseDerivee(arg1, arg2):ClasseMere(arg1) { // par défaut
+	attr2 = arg2;
+}
+ClasseDerivee::ClasseDerivee(ClasseDerivee &C):ClasseMere(C) { // par recopie
+	attr2 = C.attr2;
+}
+ClasseDerivee& ClasseDerivee::operator=(ClasseDerivee& C) { // affectation
+	this -> ClasseMere::operator=(A);
+	attr2 = C.attr2;
+	return *this;
+}
+type ClasseDerivee::ma_method (args2) { // surcharge
+	... ClasseMere::ma_method(args1) ... //appel à celle qu'on est en train de surcharger
+	... //avec args2
+}
+
+// main.cpp
+void main () {
+	ClasseDerivee c;
+	...
+	c.ClasseMere::ma_method(args); // pr forcer l'appel de la method avant surcharge
+}
+```
+
+* Le destructeur par défaut d'une classe dérivée fait appel au destructeur de la classe mère.
+* Eviter absolument l'héritage multiple, le prod garantit que c une horreur.
+
+### Méthodes virtuelles et polymorphisme
+
+#### Typage statique
+
+Soit une classe `B` dérivée d'une classe `A`, qui surcharge une method `fn` de `A` :
+```cpp
+A* pta;
+B* ptb;
+pta = ptb; // tt va bien jusque là
+pta -> fn(args); // appelle la fn de A... bah oui j puisque pta* est de type A 
+```
+
+#### Typage dynamique
+
+Faut juste ajouter un `virtual` à la method de `A` pr que ça résolve l'appel vers une surcharge :
+```cpp
+//.h
+class A {
+	public:
+		...
+		virtual type fn(args);
+		...
+	...
+}
+```
+
+### Classe abstraite
+
+C chelou, tqt, ms pr avoir une classe *virtuelle* (abstraite), il faut et il suffit d'avoir une fn virtuelle avec `= 0` :
+```cpp
+class A {
+	public:
+		...
+		virtual type fn(args) = 0; // paf la classe A est abstraite
+		...
+	...
+}
+```
+
+### Exceptions
+
+3 mots-clefs (*keywords*):
+```cpp
+throw
+try
+catch
+```
+
+Une exception, c tjs hérité de la classe `exception`.
+
+Pr le try catch :
+```cpp
+try {
+	instr;
+} catch(int n) { // code d'err
+	instr;
+} catch(const char* msg) { // msg d'err
+	instr;
+} catch(bad_alloc) { // natif
+} catch(...) { // 
+	instr;
+}
+```
+
+Pr le throw :
+```cpp
+#include <cmath>
+using namespace std;
+
+float racine(double d) {
+	if (d < 0)
+		throw 1;
+	return sqrt(d)
+}
+```
+
+#### Liste d'initialisation
+
+```cpp
+// voir diapo 70
+Individu::Individu(char* Name, int j, int m, int a):DN(j, m, a)
+{strcpy(Nom, Name);}
+Individu::Individu(char* Name, Date& d):DN(d)
+{strcpy(Nom, Name);}
+```
+
+#### Bonnes pratiques
+
+* L'héritage fige bcp de choses, donc il est utilisé de moins en moins
+* Les attr `private` d'une classe sont mm pas accessibles par une classe qui en dérive.
+	* Pr le permettre on place ça ds `protected` : c comme privé pr la classe elle-mm, et pr les classes dérivées de celle-ci, elles peuvent ce servir de ces attr hérités.
+
 ## Vrac
 
 Pr chaque classe, on a 2 fichiers :
-* un `.h`pr ...
-* un `.cpp` pr ...
+* un `.h`(*header*) pr la déclaration de la classe
+* un `.cpp` pr le code de la classe
