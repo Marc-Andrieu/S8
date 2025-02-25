@@ -281,6 +281,7 @@ Disparité (diapo 28 qui a l'air banger) :
         * $\gamma < 1$ pr toucher au contraste
     * Piecewise-linear (liné par morceau)
 * Qlq fn Matlab utiles :
+    * `fft2`, `ifft2`
     * `imcomplement(M)` pr le négatif
     * `mat2gray(M)` pr display une mat en tant qu'img N&B
     * `im2uint8(M)` pr mult la mat par un scalaire pr l'avoir ds $\mathcal{M}([0; 255])$
