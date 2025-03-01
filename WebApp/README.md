@@ -585,3 +585,157 @@ C les fameux headers `Origin, Access-Control-Allow-Origin`.
 Bref, le CORS c nécessaire pr faire fonctionner Ajax.
 Dès qu'on ft autre chose que du GET, faut caser le OPTIONS avant.
 
+## Autres APIs
+
+### Audio
+
+Avec `controls=false`, on le rend inivisible
+```html
+<audio src="chemin de fichier" controls="true"></audio>
+<script>
+    cet_élém.play();
+    cet_élém.pause();
+    cet_élém.paused; //c un bool
+    cet_élém.currentTime = 0; // passe à un certain moment
+    cet_élém.duration; // durée de l'audio
+</script>
+```
+
+### Vidéo...
+
+```html
+<video>
+```
+
+### Canvas
+
+```js
+mon_canvas.height;
+ctx = mon_canvas.getContext('2d');
+ctx.fillStyle = 'orange';
+ctx.fillRect(nbr, nbr, nbr, nbr);
+```
+
+### Polices open-source
+
+Genre les Google Fonts
+
+### Carte
+
+Leaflet
+
+## Node.js
+
+* 2009
+* côté serv
+* pas multitâche : en vrai c une seule boucle ms avec entrées/sorties non-bloquantes
+
+### Minimal server
+
+```js
+const http = require('http');
+function handler(request, response) {
+ response.writeHead(200, {'Content-Type': 'text/plain'});
+ response.end("Yo");
+}
+const server = http.createServer(handler);
+
+server.listen(3000);
+console.log('Adresse : http://localhost:3000/');
+```
+
+### npm
+
+```sh
+npm install truc
+```
+Avec un flag `-g` pr une installation globale
+
+### Repo du prof
+
+* https://github.com/dmolinarius/demofiles/tree/master/elc-d3/cours4
+
+### Lecture/écriture de fichier
+
+```js
+const fs = require('fs')
+
+// lecture
+const stream1 = fs.createReadStream('chemin');
+stream1.setEncoding('utf-8');
+stream1.on('data', function(data) {});
+
+// écriture
+const stream2 = fs.createWriteStream('./writestream.out');
+stream2.write("str");
+```
+
+### http.createServer
+
+* Ds la fn qu'on lui passe, 2 args :
+    * request
+    * response
+
+### Module 'connect'
+
+* ça a l'air pratique pr servir des fichiers statiques
+
+```js
+const connect = require('connect');
+const static_pages = require('serve-static'); // npm install serve-static
+const app = connect()
+ .use(static_pages('htdocs')) // middleware de gestion de pages statiques
+ .use((request,response) => { // middleware maison pour gestion 404
+    response.writeHead(404, {
+        'Content-Type': 'text/plain; charset=utf8'
+    });
+    response.end('Ah 404');
+ })
+;
+app.listen(8080);
+```
+
+#### Basic auth
+
+Bon tu sais que c pas très secure, ms faut caser ça là
+
+#### Module 'express'
+
+...
+
+#### WebSockets avec 'socket.io
+
+Côté serv
+```js
+var io = require('socket.io').listen(8080);
+io.sockets.on('connection', function (socket) { // réception événément 'connection'
+ socket.emit('hello', { 'this': 'is my data' }); // émission événement 'hello'
+});
+
+```
+
+Côté client
+```js
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io.connect('http://localhost:3000');
+    socket.on('mon_event', function (data) {
+        // faire des trucs avec JSON.stringify(data)
+    });
+</script>
+```
+
+#### MySQL
+
+```js
+const connection = require('mysql').createConnection({
+    host: 'localhost',
+    user: 'user',
+    password: 'password',
+    database: 'database'
+});
+connection.query( 'SELECT * FROM `table`' , (err, results) => {
+    console.log(results);
+});
+
+```
