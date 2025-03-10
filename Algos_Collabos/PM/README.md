@@ -36,4 +36,36 @@ Déf : algos génétiques
 # CM de la rentrée (10 mars) : histoire des réseaux de neurones
 
 * Ppe : un neurone $e_i$ a un état qui dépend de $\mathcal{C}_i^{excitateur}$ l'ens des neurones qui ajoutent de l'activation, et $\mathcal{C}_i^{inhibiteur}$ les neurones qui retirent de l'activation.
-In fine c pareil au sgn près, juste on somme leurs contributions à $e_i$, et selon que ça dépasse ou non un sueil $\theta_i$, on dit que le neuron $e_i$ est activé ou non.
+In fine c pareil au sgn près, juste on somme leurs contributions à $e_i$, et selon que ça dépasse strictement un sueil $\theta_i$, on dit que le neuron $e_i$ est activé ou non.
+    * On peut faire de la logique :
+        * une porte OU c un seuil de 0 (jusqu'à 0,9) avec des +
+        * une porte ET c un seuil de 1 (jusqu'à 1,9) avec des +
+        * une porte NON c un - sur le truc à nier et un seuil de -1 (jusqu'à -0,1)
+* In fine c encore juste de l'algèbre liné : c un produit scalaire entre un vecteurs de poids et le vecteur des activations des neurones du layer précédent
+
+Voca :
+* Récurrent : $\exists$ une boucle : matrice de poids $p_i$ triangulaire (pr un graphe avec tous les neurones)
+    * On ft évoluer les poids comme ça :
+$$
+p_{ji}' = p_{ji} + Pas(e_i^{theo} - e_i) \cdot e_i
+$$
+
+Où $Pas$ c une fn pr le pas d'apprentissage, c de la descente de 
+* En 1982, Hopfield mq, étant donné une mat de poids qui est sym (donc c un réseau récurrent), et une fn de seuil qui output du -1 ou du -1 par rapport à un seuil, bah on peut définir une énergie, trucs de Lyapunov, et bref le réseau converge !
+
+De nos jours :
+$$
+e_i(t_n) = \varphi \left( \sum_i p_{ji} e_j(t_{n - 1}) \right)
+$$
+
+Où $\varphi$ c la fn réponse : heaviside, affine entre $\theta_1$ et $theta_2$, sigmoïde, etc.
+BTW, la sigmoïde :
+$$
+\sigma(z) = \frac{1}{1 + \mathrm{e}^{-Tz}}
+$$
+
+Pr choisir les poids :
+* Méthode de gradient
+* ...
+* Algos génétiques !
+
