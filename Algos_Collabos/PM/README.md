@@ -32,3 +32,8 @@ Déf : algos génétiques
 1. Sélec nat : reproduction des + adaptés : générer les enfants par crossover ou clonage
 1. Mutation de qlq indivs
 1. If fitness pas assez good : `GOTO 2`
+
+# CM de la rentrée (10 mars) : histoire des réseaux de neurones
+
+* Ppe : un neurone $e_i$ a un état qui dépend de $\mathcal{C}_i^{excitateur}$ l'ens des neurones qui ajoutent de l'activation, et $\mathcal{C}_i^{inhibiteur}$ les neurones qui retirent de l'activation.
+In fine c pareil au sgn près, juste on somme leurs contributions à $e_i$, et selon que ça dépasse ou non un sueil $\theta_i$, on dit que le neuron $e_i$ est activé ou non.
