@@ -421,3 +421,49 @@ $$
 e := f - \hat f
 $$
 
+## Hough Transform
+
+### Espace de rpzt° naïf
+
+* L'équa de ligne c $y = f(x) = ax + b$ ds l'espace de l'image
+* DS l'espace des params, $b = g(a) = y - axs$
+* Un pt ds un espace est une droite ds l'autre
+* Donc on parcourt l'image ds $x$ et ds $y$ et on accumule : pr chaque $a$ on incrémente la cellule $y - ax$
+* A la fin, le *point* où l'accumulateur est le + grd, ça correspond à la *droite* la meilleure
+
+### Faire mieux : $(\rho; \theta)$
+
+$$
+\rho = x \cos \theta + y \sin \theta
+$$
+
+Du coup l'algo devient :
+```
+Pr chaque (x, y):
+    Pr chaque theta:
+        Case[ x*cos(theta) + y*sin(theta) ] += 1
+```
+
+### Amélio
+
+* En calc le grad, on peut restreindre l'intervalle de $\theta$ testés
+
+### Cercle
+
+* C le mm concept, juste une équa différente, et on a 3 inc pas 2
+
+## Transformations morphologiques (CM4 tqt rien n'a du sens ds ce cours)
+
+### Opérations standards
+
+Etant donné :
+* Une img binaire
+* une fn $\theta$ une fn à la Heaviside (1 au-delà d'un seuil, 0 en deçà)
+* et un *élém structurant*, généralement du carré de $n \times n$ pixels avec $n$ petit et impair, juste le nbr de 1 autour d'un pixel $c(x; y)$
+
+On définit qlq opérations
+* Dilatation : $dilate(x; y) := \theta(c(x; y); 1)$
+* Erosion : $dilate(x; y) := \theta(c(x; y); S)$ où $S$ c la taille de l'élém structurant
+* Majorité : $maj(x; y) := max(c(x; y) S/2)$
+* Ouverture : $opening(x; y) := dilate(erode(x; y); S)$
+* Fermeture : $close(x; y) := erode(dilate(x; y); S)$
