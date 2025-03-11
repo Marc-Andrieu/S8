@@ -373,3 +373,51 @@ Pr zoomer,dézoomer, tourner, corrections géom, etc
     * La source (?), FFT; subsampling (réduire le nbr de variantes de qqch utilisées psk l'oeil humain fera pas vrmt la diff)
         * Subsampling : écrit en format A:B:C (e.g. 4:2:2), resp. référence, le nbr de chrominance ds la 1e ligne, et pareil pr la luminance (c pas clair ms je fais avec le cours)
         * RLC (Redundancy-based methods) : e.g. `2bccccccefeel -> 2b#6cef#2el`
+* On a globalement 2 raisons pr faire de la compression : 
+    * L'oeil humain est limité donc c con de tout stocker
+    * Y a de la redondance, y a déjà par construction des trucs qui apportent pas d'information
+
+
+### DCT (Discrete Cosinus Transform)
+
+$$
+\begin{align}
+\mathrm{DCT}(i; j) &= \frac{1}{\sqrt{2N}} C(i) C(j) \sum_{x=0}^{N-1} \sum_{y=0}^{N-1} \mathrm{pixel} (x; y) \cos \left( \frac {(2x + 1) i \pi}{2N} \right) \cos \left( \frac {(2y + 1) j \pi}{2N} \right) \\
+\mathrm{pixel}(x; y) &= \frac{1}{\sqrt{2N}} \sum_{i=0}^{N-1} \sum_{j=0}^{N-1} C(i) C(j) \mathrm{CDT} (i; j) \cos \left( \frac {(2x + 1) i \pi}{2N} \right) \cos \left( \frac {(2y + 1) j \pi}{2N} \right)
+\end{align}
+$$
+
+Où $C(x) = 1/\sqrt{2}$ si $x = 0$ et 0 sinon
+
+En gros ça donne une nouvelle matrix $F$, avec un gros coeff en haut à gauche, et que des ptits coeffs ailleurs
+
+### Hybrid Compression
+
+* Basé sur CDT
+* A pertes
+
+Pipeline :
+1. YCbCr
+2. DCT
+3. Quantification
+4. Encodage
+
+#### Quantification
+
+On a une *table de quantification* $Q, c une matrice de mm taille que $F$, et on pose, en arrondissant à l'entier le + proche pr chaque coeff :
+$$
+\hat F (u; v) = F(u; v) / Q(u; v)
+$$
+
+#### Zigzag coding
+
+* Pr transf l'img en un joli vecteur : on parcours en zigzag.
+* Et là on peut faire du codage de source avec Huffmann, ou faire du RLC (Run Length Coding) / VLC (Variable Length Coding)
+
+### Décompression
+
+* On peut estimer l'erreur avec :
+$$
+e := f - \hat f
+$$
+
