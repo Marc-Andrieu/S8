@@ -138,7 +138,7 @@ Y a des espaces de couleur :
 * RGB : Red Green Blue
 * LAB : 
 * HSL : Hue (Teinte, c une couleur de l'arc-en-ciel) Saturation (pureté de la teinte) Luminance (éclairage)
-* YCDCR (Luminance Composante Bleue Commposante Rouge) : Luminance et Chrominance (cf. vieille vidéo d'*El Jj*) : l'oeil humain est en effet bcp + sensible à la luminance qu'à la chrominance (on peut donc la compresser sans pression)
+* YCbCr (Luminance Composante Bleue Commposante Rouge) : Luminance et Chrominance (cf. vieille vidéo d'*El Jj*) : l'oeil humain est en effet bcp + sensible à la luminance qu'à la chrominance (on peut donc la compresser sans pression)
 
 #### RGB
 
@@ -467,3 +467,71 @@ On définit qlq opérations
 * Majorité : $maj(x; y) := max(c(x; y) S/2)$
 * Ouverture : $opening(x; y) := dilate(erode(x; y); S)$
 * Fermeture : $close(x; y) := erode(dilate(x; y); S)$
+
+# Nouvelle gamme de CMs, avec une autre prof, and it's in English
+
+* Pages of the lectures on her GH: https://github.com/shaifaliparashar/Lectures_ecl/blob/main/lectureA_ecl.pdf
+
+## Basic Img Proc
+
+* Basically an img can be thought of as a fn $\mathbb{R}^2 \to [[0; 255]]^3$, assuming a classical 3-channel RGB.
+
+### Goals of Img Proc
+
+* Img compression
+* Img restoration (that's enhancement): denoising, deblurring
+* CV (Computer Vision)
+    * Optical flow...
+
+### Moving Average Filter (linear)
+
+El clásico
+```math
+\frac{1}{9} \begin{bmatrix}
+    1 & 1 & 1 \\
+    1 & 1 & 1 \\
+    1 & 1 & 1
+\end{bmatrix}
+```
+
+However that blurs the img a lil bit, so consider not having the same coeffs everywhere but do some gaussian-like stuff, in case u wanna preserve edges or smth.
+Why? Bc gaussian things reduce how important neighbors are.
+
+### Img thresholding (non-linear)
+
+* That's sorta an indicator fn, up to a $\times 255$, and considering the set when the BW pixel is >100 or some other value.
+
+### Convolution & Correlation
+
+Yeah she's right, basically convolution is correlation wihthout flippin' one of the operands.
+
+#### Convol as a sharpening filter
+
+Given that
+* original - smoothed = detail
+* original + detail = sharpened
+Then 2 * original - smoothed = sharpened!
+
+#### Correlation & Template Matching
+
+* Well, correlation *as* template matching!
+* Put the img of the thing to match as the kernel in the correlation, and that's template matching
+
+#### Cross-Correlation
+
+Nothing to say
+
+#### Template matching again
+
+```math
+h_{m, n} := \frac{\sum_{k, l} (g_{k, l}- \bar g_{k, l}) (f_{m + k, n + l} - \bar f_{m, n})}{\sqrt{\sum_{k, l} (g_{k, l}- \bar g_{k, l})^2 \sum_{k, l} (f_{m + k, n + l} - \bar f_{m, n})^2}}
+```
+
+Explications
+* Le dénominateur c purement de la normalisation pr pas saturer sur des img de trop forte intensité.
+* Truc - son moyenné c les détails
+
+#### Handling size variations
+
+* Actually that's rather smart : concat a pic w/ smaller versions of itself; so u have 1 pc=ic with the same object but repeated w/ different sizes.
+* Then do the classical template matching as above
