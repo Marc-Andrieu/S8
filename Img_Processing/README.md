@@ -535,3 +535,24 @@ Explications
 
 * Actually that's rather smart : concat a pic w/ smaller versions of itself; so u have 1 pc=ic with the same object but repeated w/ different sizes.
 * Then do the classical template matching as above
+
+#### Laplacian
+
+Pyramid Blending
+* At low frequencies, blend slowly
+* At high frequencies, blend quickly
+
+#### Img texture : maïve histogram matching
+
+Using $\chi^2$ :
+```math
+\chi^2 (h_i, h_j) := \frac{1}{2} \sum_{m=1}^K \frac{( h_i(m) - h_j(m))^2}{h_i(m) + h_j(m)}
+```
+
+#### Img textures : matching Local Binary Patterns (LBP)
+
+...
+
+#### Img textures : filter banks
+
+Basically the idea: looking at different sizes and orientations of details
