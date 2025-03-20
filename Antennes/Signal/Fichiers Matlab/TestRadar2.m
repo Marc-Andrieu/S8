@@ -73,12 +73,33 @@ title('spectre du signal reçu');
 % b- recepteur optimal pour une estimation conjointe de position et de vitesse
 %
 
-% a completer
+fmin = -50;         % decalage frequentiel min (Hz)
+fmax = 50;          % decalage frequentiel max (Hz)
+df = 0.2;           % pas frequentiel du vecteur des decalages frequentiels (Hz)
+f = [fmin:df:fmax]; % vecteur des decalages frequentiels (Hz)
+Nf = length(f);     % nombre de decalages frequentiels
+
+
+A = zeros(2*N-1, Nf);
+for iff = 1:Nf
+    x_decale = x .* exp(iim * 2 * pi * f(iff) * t);       % decalage frequentiel du x émis
+    A(:,iff) = transpose(xcorr(x_decale, y));    % autocorrelation temporelle entre le y reçu et x_décalé
+end
+
+tau = [-N:N-1]*Ts;
+
+B = abs(A).^2;
+[vecteur_valeurs, indices_lignes] = max(B); 
+[valeur, index_colonne] = max(vecteur_valeurs); % index_colonne sur 500
+index_ligne = indices_lignes(index_colonne); % sur 9000
+temps_optimal = tau(index_ligne)
+freq_optimale = f(index_colonne)
 
 
 %
 % c - estimation de la position et de la vitesse
 %
 
-% a completer
+position_optimale = temps_optimal * c / 2
+vitesse_optimale = freq_optimale * c / 2 / nup
 
