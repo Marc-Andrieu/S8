@@ -72,7 +72,7 @@ x = sqrt(Ex)*x/sqrt(sum(abs(x).^2)); % normalisation energie
 c = 3*10^2;         % vitesse de propagation de l'onde (m/sec)
 alpha = 1;          % attenuation
 psi = 2*pi*rand;    % déphasage aléatoire (rad)
-sigma2 = 0.01;      % variance du bruit additif blanc gaussien
+sigma2 = 0.00;      % variance du bruit additif blanc gaussien
 
 % paramètres de la cible
 r = 100;            % distance de la cible (m)
@@ -115,6 +115,7 @@ xlabel('frequence (Hz)');
 ylabel('module');
 title('spectre du signal reçu');
 
+%%
 
 % traitements radar
 %---------------------------------------------------------------------------------------------%
@@ -143,7 +144,7 @@ for iff = 1:Nf
     A(:,iff) = transpose(xcorr(x_decale, y));    % autocorrelation temporelle entre le y reçu et x_décalé
 end
 
-tau = [-N:N-1]*Ts;
+tau = [-N:N-2]*Ts;
 
 B = abs(A).^2;
 [vecteur_valeurs, indices_lignes] = max(B); 
@@ -151,6 +152,14 @@ B = abs(A).^2;
 index_ligne = indices_lignes(index_colonne); % sur 9000
 temps_optimal = tau(index_ligne)
 freq_optimale = f(index_colonne)
+
+figure(3)
+mesh(f, tau, B)
+axis tight; grid on;
+ylabel('decalage temporel (sec)');
+xlabel('decalage frequentiel (Hz)');
+zlabel('|R(\tau,f)|.^2');
+title(['fonction de réception du signal ',num2str(signal)]);
 
 %
 % (Question 4) - estimation de la position et de la vitesse
