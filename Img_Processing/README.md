@@ -556,3 +556,158 @@ Using $\chi^2$ :
 #### Img textures : filter banks
 
 Basically the idea: looking at different sizes and orientations of details
+
+## Feature extraction and matching
+
+* Finding same things across images : these things are *keypoints*
+
+### Feature extraction
+
+#### What to do with features?
+
+1. Use a detector to detect same scene points independently in both images and find a set of
+distinctive keypoints
+2. Extract and normalize the region content
+3. Define a region around each keypoint
+4. Compute local descriptor from normalized region
+5. Find correspondences by matching local descriptors
+
+#### What makes a good feature?
+
+* Region extraction needs to be repeatable and accurate
+* Invariant to translation, rotation, scale changes
+* Robust or covariant to out-of-plane (affine) transformations
+* Robust to lighting variations, noise, blur, quantization
+
+* Locality: Features are local, therefore robust to occlusion and clutter
+* Quantity: We need sufficient regions to cover the object
+* Distinctiveness: The regions should contain “interesting” structure
+* Efficiency: Close to real-time performance 
+
+#### Features from Accelerated Segment Test (FAST)
+
+```
+  xxx
+ x   x
+x     x
+x  p  x
+x     x
+ x   x
+  xxx
+```
+
+Look for a 3 neighborhood circle (Bresenhem/mid point circle) around a point = 16 points
+If a minimum of 12 points have intensity higher or smaller than the point, it’s a good feature
+
+#### Harris Corners
+
+* Localise the point through a small window
+* Define precise location by shifting a window in any direction such
+that large change in pixels intensities are observed
+
+Why corners?
+Significant change in all directions
+
+Window-averaged squared change of intensiry induced by shifting the image data by $[u; v]$ :
+```math
+E(u; v) = \sum_{x, y} w(x; y) (I(x + u; y + v) - I(x; y))^2
+```
+Where $w$ is the window fn, so a rect or a gaussian.
+Expanding to the 1st order gives:
+```math
+E(u; v) \approx \begin{bmatrix}
+    u & v
+\end{bmatrix} \left( \sum_{x, y} w(x; y) \begin{bmatrix}
+    I_x^2 & I_x I_y \\
+    I_x I_y & I_y^2
+\end{bmatrix} \right) \begin{bmatrix}
+    u \\
+    v
+\end{bmatrix}
+```
+
+Calling $M$ that matrix of the quadratic form, define $R := |M| - a tr(M)^2$ where $a = \begin{bmatrix} 0.04 & 0.06 \end{bmatrix}$, then if $R < 0$ it's an edge, if $R > 0$ it's a corner, and if $|R|$ is small, it's flat
+
+#### Scale-invariant Detection
+
+Laplacians are good candidtes for ???
+
+Points of interest are local maxima in both position and scale.
+Different scales emphasize different features
+
+#### Affine invariant detection
+
+...
+
+#### Comparison of keypoints detection
+
+slide 74
+
+### Feature Matching
+
+#### Pacthes as descriptors
+
+Taking a small region around a point of interest, and write that matrix as a vector.
+And match using correlation
+
+#### Descriptors invariant to ...
+
+...
+
+#### Scale-invariant Feature Transform (SIFT) Descriptor
+
+* Image content is transformed into local feature coordinates that are
+invariant to translation, rotation, scale, and other imaging parameters
+* Better repeatability w.r.t. scale change than Harris, but worse than Harris-Laplacian
+* Uses DoG (difference of gaussian)
+
+...
+
+#### ...
+
+#### Notion of distance between descriptors
+
+ROC curve : true positive rate as a fn of false positive rate
+
+## Optical flow
+
+A pt moves, so at $t + 1$, we have the same up to a $+(u; v)$ transl:
+```math
+\begin{align}
+I(x; y; t) &= I(x + u; y + v; t + 1) \\
+&\approx I(x; y; t) + I_x u + I_y v + I_t
+\end{align}
+```
+
+So that:
+```math
+0 \approx I_x u + I_y v + I_t = \nabla I \begin{bmatrix}
+    u \\
+    v
+\end{bmatrix} + I_t
+```
+
+Where that $(u; v)$ translation vector is the unknown.
+Well, the solutions are actually up to the kernel of that gradient, *i.e* can always add some $(u'; v')$ provided $\nabla I \begin{bmatrix}
+    u' \\
+    v'
+\end{bmatrix} = 0$.
+
+So we need more equations.
+Ofc we may assume the neighboring pixels have the same $(u'; v')$ so that:
+```math
+\begin{bmatrix}
+    I_x(p_1) & I_y(p_1) \\
+    I_x(p_2) & I_y(p_2) \\
+    \dots & \dots
+\end{bmatrix} \begin{bmatrix}
+    u \\
+    v
+\end{bmatrix} = -\begin{bmatrix}
+    I_t(p_1) \\
+    I_t(p_1) \\
+    \dots
+\end{bmatrix}
+```
+
+Calling $A$ that $25 \times 2$, we assume $A^T A \in \mathcal{M}_2(\mathbb{R})$ is invertible.
