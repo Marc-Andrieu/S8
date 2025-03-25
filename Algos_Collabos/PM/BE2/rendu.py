@@ -1,5 +1,7 @@
+import copy
 import numpy as np
 from pathlib import Path
+import random as rnd
 
 PATH = Path("Algos_Collabos") / "PM" / "BE2" / "data"
 type Data = tuple[list[int], int]
@@ -74,15 +76,12 @@ def crossover(nn1: NN, nn2: NN) -> NN:
     return nn
 
 def mutation(nn: NN, e_m: float) -> NN:
-    nn_sortie: NN = []
-    for M, b in nn:
-        m, n = M.shape
-        nn_sortie.append((
-            M + e_m * mat_rnd(m, n),
-            b + e_m * vect_rnd(m)
-        ))
+    n_tenseur = rnd.randint(0, 1)
+    m, n = nn[n_tenseur][0].shape
+    m, n = rnd.randint(0, m - 1), rnd.randint(0, n - 1)
+    nn_sortie = copy.deepcopy(nn)
+    nn_sortie[n_tenseur][0][m][n] += rnd.uniform(-e_m, e_m)
     return nn_sortie
-
 
 def collabo(
     prec: float,
@@ -98,7 +97,7 @@ def collabo(
         return err_totale(nn, read_data_file(path))
     
     popul: list[NN] = sorted([
-            [tenseur_rnd(88, 48), tenseur_rnd(10, 88)]
+            [tenseur_rnd(22, 48), tenseur_rnd(10, 22)]
             for _ in range(N)
         ],
         key=key_err,
@@ -112,7 +111,7 @@ def collabo(
         print("err best :", key_err(best))
         le_premier = False
         popul = sorted(
-            [[tenseur_rnd(88, 48), tenseur_rnd(10, 88)] for _ in range(p_M)] +
+            [[tenseur_rnd(22, 48), tenseur_rnd(10, 22)] for _ in range(p_M)] +
             [mutation(best, e_m) for _ in range(p_m)] +
             [crossover(best, popul[i]) for i in range(-2, -p_s - 2, -1)] +
             [best],
@@ -126,11 +125,11 @@ def collabo(
 
 if __name__ == "__main__":
     best, f_best, hall_of_fame = collabo(
-        prec=1,
+        prec=83,
         N=60,
         p_M=5,
         p_m=50,
-        e_m=10,
+        e_m=1,
         path=PATH / "test.data"
     )
     print("Best : ", best)
