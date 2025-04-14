@@ -29,26 +29,31 @@ xray = xray(:, :, 1);
 moon_fft = abs(fftshift(fft2(moon)));
 woman_fft = abs(fftshift(fft2(woman)));
 xray_fft = abs(fftshift(fft2(xray)));
-mon_fft_normalise = moon_fft ./ max(moon_fft);
 
 % Q1
 
 figure(1)
 subplot(2, 2, 1)
-imshow(moon, [])
+imshow(xray, [])
 title("Original")
 
 subplot(2, 2, 2)
-imshow(moon_fft, [])
-title("FFT naïf")
+imshow(xray_fft, [])
+title("FFT simple")
 
 subplot(2, 2, 3)
-imshow(mon_fft_normalise, [])
-title("FFT normalisé")
+imshow(xray_fft ./ max(xray_fft), [])
+title("FFT normalisée")
 
 subplot(2, 2, 4)
-imshow(log(1 + mon_fft_normalise), [])
-title("FFT normalisé + log")
+imshow(log(1 + xray_fft), [])
+title("log(1 + FFT)")
+
+
+
+
+
+%{
 
 % Q2
 
@@ -182,4 +187,7 @@ n : ordre pr les Butterworth
 
 % ftype=’ideal’, D0=50
 
+
+
+%}
 
