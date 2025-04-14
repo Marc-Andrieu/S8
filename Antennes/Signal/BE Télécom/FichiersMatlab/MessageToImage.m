@@ -14,7 +14,9 @@ function [imgprime] = MessageToImage(messageprime,N,M,d)
 %
 
 % conversion en uint8
-imgsignalprime = uint8(bin2dec(reshape(num2str(messageprime),N*M*d,8)));
+imgsignalprime = uint8(bin2dec( ...
+    reshape(num2str(messageprime),N*M*d,8) ...
+));
 
 % conversion en image
 imgprime = reshape(imgsignalprime,N,M,d);

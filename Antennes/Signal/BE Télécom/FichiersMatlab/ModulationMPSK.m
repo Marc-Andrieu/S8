@@ -4,7 +4,7 @@
 % 
 % BE signal - Telecoms
 %
-% ModulationQPSK.m
+% ModulationMPSK.m
 %
 
 clear all;
@@ -34,7 +34,7 @@ if(imageaff)
     m = ImageToMessage(img);
     Nbit = length(m);   % nombre de bit à transmettre
 else
-    Nbit = 100;   % nombre de bit à transmettre (multiple de 2 pour une modulation QPSK)
+    Nbit = 100;   % nombre de bit à transmettre (multiple de "puissance" pour une modulation MPSK)
     m = randi([0 1],1,Nbit);
     figure,
     plot(m);
@@ -43,13 +43,13 @@ else
 end
 
 
-% modulation QPSK
+% modulation MPSK
 %---------------------------------------------------------------------------%
 
 puissance = 3;
 M = 2 ^ puissance;
 
-% creation de la sequence de symboles à transmettre (QPSK : 1 symbole = 2 bits)
+% creation de la sequence de symboles à transmettre (MPSK : 1 symbole = "puissance" bits)
 Nsymb = Nbit / puissance; % nombre de symboles dans le message
 msymbole = reshape(m,puissance,Nsymb); % sequence de symbole (matrice 2*Nsymb)
 
@@ -58,7 +58,7 @@ nphase = bin2dec(num2str(msymbole'))'; % transposition de {00,01,10,11} vers {0,
 ux = A*exp(iim*2*pi*nphase/M+iim*pi/M);
 
 % Mise en forme du signal ux(t) : échantillonnage et débit symbole
-Ds = Db/2;              % debit symbole (1/sec)
+Ds = Db/puissance;              % debit symbole (1/sec)
 nrepet = floor(nus/Ds); % facteur de repetition
 uxnus = reshape(ones(nrepet,1)*ux,1,Nsymb*nrepet); % chaque symbole est répété 'nrepet' fois
 
@@ -116,7 +116,7 @@ ylabel('module');
 title('spectre Z(nu) du signal reçu');
 
 
-% Demodulation QPSK
+% Demodulation MPSK
 %---------------------------------------------------------------------------%
 
 % récupération de l'enveloppe complexe (démodulation IQ)
@@ -147,14 +147,14 @@ title('constellation à la réception');
 
 % decision : creation de nphaseprime à valeurs dans {0,1,2,3}
 % à partir de uz, on veut retrouver nphaseprime = nphase
-nphaseprime = 2 + floor(angle(-uz) * M / (2 * pi)); % A completer
+nphaseprime = M/2 + floor(angle(-uz) * M / (2 * pi)); % A completer
 
 % retour à une sequence binaire mprime à partir de nphaseprime
-mprime = str2num(reshape(dec2bin(nphaseprime)', M*Nsymb,1));
+mprime = str2num(reshape(dec2bin(nphaseprime)', puissance*Nsymb,1));
 
 if(imageaff)
-    [N,M,d] = size(img);
-    [imgprime] = MessageToImage(mprime,N,M,d);
+    [N,M_colonnes,d] = size(img);
+    [imgprime] = MessageToImage(mprime,N,M_colonnes,d);
     figure,
     image(imgprime);
     title('image reçu');
